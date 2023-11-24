@@ -8,7 +8,7 @@ const multer= require("multer");
 var app = express();
 app.use(cors());
 
-d
+
 var CONNECTION_STRING="mongodb+srv://GuestService:oUeaXHjiZlx1MYDj@cluster0.uqiuixp.mongodb.net/?retryWrites=true&w=majority";
 
 var DATABASENAME="guestservice-db";
