@@ -1,0 +1,20 @@
+.dashboard {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.list-wrapper {
+    display: flex;
+    gap: 10px;
+    margin: 10px 30px;
+    flex-wrap: wrap;
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: space-around;
+}
+
+.header-wrapper {
+    margin: 50px auto;
+}

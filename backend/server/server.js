@@ -11,7 +11,7 @@ app.use(cors());
 app.use(multer().none());
 
 
-var CONNECTION_STRING="mongodb+srv://GuestService:oUeaXHjiZlx1MYDj@cluster0.uqiuixp.mongodb.net/?retryWrites=true&w=majority";
+var CONNECTION_STRING="mongodb+srv://rienervanessa:hwpgbYmZ8uEa88Df@cluster0.wk3uhju.mongodb.net/?retryWrites=true&w=majority";
 
 var DATABASENAME="guestservice-db";
 var database;
