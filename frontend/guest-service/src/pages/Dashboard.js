@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+import React, { useState } from "react";
 import './Dashboard.css';
+import { getEvents } from '../services/EventsService';
 
 function Dashboard() {
     const [events, setEvents] = useState();
