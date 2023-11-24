@@ -41,7 +41,7 @@ app.post('/api/AddUser', multer().none(), (request, response) => {
 
     database.collection("guestservice-users").count({}, function (error, numOfDocs) {
         const newUser = {
-            id: (numOfDocs + 1).toString(),
+            id: (numOfDocs + 1).toString(), //->sonst hier einfach: id: request.body.id, wenn du de im body mitgibst 
             email: request.body.email,
             firstName: request.body.firstName,
             lastName: request.body.lastName,
