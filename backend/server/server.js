@@ -41,7 +41,7 @@ app.post('/api/AddUser', multer().none(), (request, response) => {
 
     database.collection("guestservice-users").count({}, function (error, numOfDocs) {
         const newUser = {
-            id: (numOfDocs + 1).toString(), //->sonst hier einfach: id: request.body.id, wenn du de im body mitgibst 
+            id: request.body.id,
             email: request.body.email,
             firstName: request.body.firstName,
             lastName: request.body.lastName,
@@ -152,18 +152,7 @@ app.get('/api/getUserInfo/:userId', (request, response) => {
 //Admin Methods
 
 app.post('/api/createEvent', multer().none(), (request, response) => {
-    const newEvent = request.body;
-
-    // Berechnen der nächsten verfügbaren ID für das Event
-    database.collection("guestservice-events").countDocuments({}, (error, numOfDocs) => {
-        if (error) {
-            console.error("Error counting documents:", error);
-            response.status(500).json({ error: "Internal Server Error" });
-            return;
-        }
-
-        // Setzen der ID für das neue Event
-        newEvent.id = (numOfDocs + 1).toString();
+    const newEvent = request.body;    
 
         // Hinzufügen des Events zur Datenbank
         database.collection("guestservice-events").insertOne(newEvent, (error, result) => {
@@ -174,7 +163,6 @@ app.post('/api/createEvent', multer().none(), (request, response) => {
                 response.json("Event created successfully");
             }
         });
-    });
 });
 
 app.put('/api/updateEvent', multer().none(), (request, response) => {
@@ -197,7 +185,7 @@ app.put('/api/updateEvent', multer().none(), (request, response) => {
 app.delete('/api/deleteEvent/:eventId', (request, response) => {
     const eventId = request.params.eventId;
 
-    database.collection("guestservice-events").deleteOne({ id: eventId }, (error, result) => {
+    database.collection("guestservice-events").deleteOne({ id:  eventId}, (error, result) => {
         if (error) {
             console.error("Error deleting event:", error);
             response.status(500).json({ error: "Internal Server Error" });

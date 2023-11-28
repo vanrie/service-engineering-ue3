@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const getUserInfo = (id) => {
-    return axios.get('http://localhost:5000/api/getUserInfo:' + id);
+    return axios.get(`http://localhost:5000/api/getUserInfo/${id}`);
 }
 
 export const userInfo = () => {

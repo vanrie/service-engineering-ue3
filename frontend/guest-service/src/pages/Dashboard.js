@@ -74,7 +74,7 @@ function Dashboard() {
         if (index !== -1) {
             event.participants.splice(index, 1);
         }
-        changeEventParticipation(event).then(() => {
+        changeEventParticipation(event.participants).then(() => {
             getAllEvents();
         })
     }
@@ -97,19 +97,22 @@ function Dashboard() {
     }
 
     function createId(){
-        return 'Asddas';
+        //TODO Vanessa: create real id
+        return '237892437';
     }
 
 
     function createParticipation(event) {
         event.participants.push(dummyUser._id);
-        changeEventParticipation(event).then(() => {
+        changeEventParticipation(event.participants).then(() => {
             getAllEvents();
         })
     }
 
     function deleteEventById(eventId) {
-        deleteEvent(eventId);
+        deleteEvent(eventId).then(() => {
+            getAllEvents();
+        });
     }
     return (
         <div className="dashboard">
@@ -177,7 +180,7 @@ function Dashboard() {
                             </Card.Text>
                             <div className='button-wrapper'>
                                 {event.isParticipant ? <Button variant="warning" onClick={() => { removeParticipation(event) }}>Austragen</Button> : <Button variant="success" onClick={() => { createParticipation(event) }}>Teilnehmen</Button>}
-                                {dummyUser.isAdmin ? <Button variant="danger" onClick={() => { deleteEventById(event._id) }}>Event löschen</Button> : null}
+                                {dummyUser.isAdmin ? <Button variant="danger" onClick={() => { deleteEventById(event.id) }}>Event löschen</Button> : null}
                             </div>
 
 

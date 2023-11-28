@@ -17,7 +17,7 @@ function Login() {
       console.log(event, email, password);
       login({email: email, password: password}).then((response) => {
         console.log(response);
-        if(response.data == 'Login successful'){
+        if(response.data._id){
             document.location.href = '/dashboard';
             console.log('redirect to page');
         }
