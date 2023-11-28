@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import './Dashboard.css';
 import { getEvents } from '../services/EventsService';
 import { deleteEvent } from '../services/EventsService';
+import { createEvent } from '../services/EventsService';
 import { changeEventParticipation } from '../services/EventsService';
 import { getUserInfo } from '../services/UserService';
 import Button from 'react-bootstrap/Button';
@@ -15,12 +16,10 @@ import Form from 'react-bootstrap/Form';
 function Dashboard() {
     const [events, setEvents] = useState();
     const [userInfo, setUserInfo] = useState();
-    const [newEvent = {
-        name: '',
-        description: '',
-        date: '',
-        type: ''
-    }, setNewEvent] = useState();
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+    const [date, setDate] = useState("");
+    const [type, setType] = useState("");
 
 
     const [show, setShow] = useState(false);
@@ -37,12 +36,13 @@ function Dashboard() {
     }
 
     useEffect(() => {
-        setUserInfo(dummyUser);
+        // setUserInfo(dummyUser);
 
-        /*
-        getUserInfo().then(res => {
+        
+        getUserInfo('1').then(res => {
+            console.log(res);
             setUserInfo(dummyUser);
-        })*/
+        })
 
         getAllEvents()
 
@@ -60,8 +60,9 @@ function Dashboard() {
                     } else {
                         event.isParticipant = false;
                     }
-                    allEvents.push(event);
                 }
+                allEvents.push(event);
+
 
             }
             setEvents(allEvents);
@@ -78,8 +79,25 @@ function Dashboard() {
         })
     }
 
-    function createNewEvent(event) {
-        console.log(newEvent)
+    function createNewEvent() {
+        console.log(name, type, description, date);
+        let body = {
+            name: name,
+            type: type,
+            description: description,
+            date: date,
+            id: createId(),
+            participants: []
+        }
+
+        createEvent(body).then(() => {
+            getAllEvents();
+
+        });
+    }
+
+    function createId(){
+        return 'Asddas';
     }
 
 
@@ -110,25 +128,25 @@ function Dashboard() {
                     <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" name="name" placeholder="Name" value={newEvent.name}
-                                onChange={e => setNewEvent({ name: e.target.value })} />
+                            <Form.Control type="text" name="name" placeholder="Name" value={name}
+                                onChange={e => setName(e.target.value )} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Beschreibung</Form.Label>
                             <Form.Control as="textarea" name="description" rows={3} placeholder="Beschreibung einfügen"
-                                value={newEvent.description}
-                                onChange={e => setNewEvent({ description: e.target.value })} />
+                                value={description}
+                                onChange={e => setDescription(e.target.value)} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Datum</Form.Label>
                             <Form.Control type="date" name="date" placeholder="Datum"
-                                value={newEvent.date}
-                                onChange={e => setNewEvent(newEvent.date = e.target.value)} />
+                                value={date}
+                                onChange={e => setDate(e.target.value)} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Art der Veranstaltung</Form.Label>
-                            <Form.Select value={newEvent.type}
-                                onChange={e => setNewEvent({ type: e.target.value })}>
+                            <Form.Select value={type}
+                                onChange={e => setType(e.target.value )}>
                                 <option>Konzert</option>
                                 <option>Sport</option>
                                 <option>Messe</option>

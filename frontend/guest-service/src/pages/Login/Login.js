@@ -2,6 +2,7 @@ import './Login.css';
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { login } from '../../services/UserService';
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -14,6 +15,13 @@ function Login() {
     function handleSubmit(event) {
       event.preventDefault();
       console.log(event, email, password);
+      login({email: email, password: password}).then((response) => {
+        console.log(response);
+        if(response.data == 'Login successful'){
+            document.location.href = '/dashboard';
+            console.log('redirect to page');
+        }
+      })
     }
     return (
         <div className="login">

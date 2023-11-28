@@ -68,8 +68,9 @@ app.post('/api/login', multer().none(), (request, response) => {
             response.status(500).json({ error: "Internal Server Error" });
         } else {
             if (result) {
-                response.json("Login successful");
+                response.json(result);
             } else {
+                console.log(email, password);
                 response.status(401).json({ error: "Invalid credentials" });
             }
         }
@@ -131,6 +132,7 @@ app.put('/api/changeEventParticipation/:eventId', multer().none(), (request, res
 });
 
 app.get('/api/getUserInfo/:userId', (request, response) => {
+    console.log(request.params);
     const { userId } = request.params;
 
     database.collection("guestservice-users").findOne(
