@@ -62,8 +62,9 @@ function Dashboard() {
             const allEvents = []
             for (const event of events.data) {
                 console.log(user);
-                for (const user of event.participants || []) {
-                    if (user.id == user) {
+                for (const user of event.participants) {
+                    console.log(user.id)
+                    if (searchParams.get('userId') == user) {
                         event.isParticipant = true;
                     } else {
                         event.isParticipant = false;
@@ -83,7 +84,7 @@ function Dashboard() {
             event.participants.splice(index, 1);
         }
         console.log(event.participants);
-        changeEventParticipation(event.id, event.participants).then(() => {
+        changeEventParticipation(event.id, {participants: event.participants}).then(() => {
             getAllEvents();
         })
     }
@@ -111,7 +112,7 @@ function Dashboard() {
     function createParticipation(event) {
         event.participants.push(searchParams.get('userId'));
         console.log(event.participants);
-        changeEventParticipation(event.id, event.participants).then(() => {
+        changeEventParticipation(event.id, {participants: event.participants}).then(() => {
             getAllEvents();
         })
     }
