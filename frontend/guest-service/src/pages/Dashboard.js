@@ -10,12 +10,19 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { useSearchParams } from 'react-router-dom';
 
 
 
 function Dashboard() {
     const [events, setEvents] = useState();
-    const [userInfo, setUserInfo] = useState();
+    const [userInfo, setUserInfo] = useState({
+        id: null,
+        firstName: '',
+        lastName: '',
+        email: '',
+        isAdmin: false
+    });
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
@@ -27,7 +34,7 @@ function Dashboard() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const dummyUser = {
+    let user = {
         _id: '1',
         firstName: 'Asda',
         lastName: 'Asda',
@@ -35,16 +42,18 @@ function Dashboard() {
         isAdmin: true,
     }
 
-    useEffect(() => {
-        // setUserInfo(dummyUser);
+    const [searchParams] = useSearchParams();
 
-        
-        getUserInfo('1').then(res => {
-            console.log(res);
-            setUserInfo(dummyUser);
+    useEffect(() => {
+        getUserInfo(searchParams.get('userId')).then(res => {
+            user = res.data;    
+
+            setUserInfo(user);
+                getAllEvents()
+
+
         })
 
-        getAllEvents()
 
 
     }, [])
@@ -54,8 +63,9 @@ function Dashboard() {
 
             const allEvents = []
             for (const event of events.data) {
-                for (const user of event.participants) {
-                    if (dummyUser._id == user) {
+                console.log(user);
+                for (const user of event.participants || []) {
+                    if (user.id == user) {
                         event.isParticipant = true;
                     } else {
                         event.isParticipant = false;
@@ -70,7 +80,7 @@ function Dashboard() {
     }
 
     function removeParticipation(event) {
-        const index = event.participants.indexOf(dummyUser._id);
+        const index = event.participants.indexOf(user.id);
         if (index !== -1) {
             event.participants.splice(index, 1);
         }
@@ -110,8 +120,9 @@ function Dashboard() {
 
 
     function createParticipation(event) {
-        event.participants.push(dummyUser._id);
-        changeEventParticipation(event.participants).then(() => {
+        event.participants.push(searchParams.get('userId'));
+        console.log(event.participants);
+        changeEventParticipation(event.id, event.participants).then(() => {
             getAllEvents();
         })
     }
@@ -127,7 +138,7 @@ function Dashboard() {
                 <h1>Event Service</h1>
                 <h3>Immer bestens informiert!</h3>
                 <p> At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. </p>
-                {dummyUser.isAdmin ? <Button variant="primary" onClick={() => { handleShow() }}>Event erstellen</Button> : null}
+                {user.isAdmin ? <Button variant="primary" onClick={() => { handleShow() }}>Event erstellen</Button> : null}
             </div>
 
             <Modal show={show} onHide={handleClose}>
@@ -187,7 +198,7 @@ function Dashboard() {
                             </Card.Text>
                             <div className='button-wrapper'>
                                 {event.isParticipant ? <Button variant="warning" onClick={() => { removeParticipation(event) }}>Austragen</Button> : <Button variant="success" onClick={() => { createParticipation(event) }}>Teilnehmen</Button>}
-                                {dummyUser.isAdmin ? <Button variant="danger" onClick={() => { deleteEventById(event.id) }}>Event löschen</Button> : null}
+                                {user.isAdmin ? <Button variant="danger" onClick={() => { deleteEventById(event.id) }}>Event löschen</Button> : null}
                             </div>
 
 

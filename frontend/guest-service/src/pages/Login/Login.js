@@ -18,7 +18,7 @@ function Login() {
       login({email: email, password: password}).then((response) => {
         console.log(response);
         if(response.data._id){
-            document.location.href = '/dashboard';
+            document.location.href = '/dashboard' + '?userId=' + response.data.id;
             console.log('redirect to page');
         }
       })

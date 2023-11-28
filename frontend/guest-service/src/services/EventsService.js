@@ -11,8 +11,8 @@ export const updateEvent = (eventId, body) => {
     return axios.put('http://localhost:5000/api/updateEvent/' + eventId, body);
 }
 
-export const changeEventParticipation = (body) => {
-    return axios.put('http://localhost:5000/api/createEvent/' + body._id, body);
+export const changeEventParticipation = (eventId, body) => {
+    return axios.put(`http://localhost:5000/api/changeEventParticipation/${eventId}`, body);
 }
 
 export const deleteEvent = (eventId) => {
