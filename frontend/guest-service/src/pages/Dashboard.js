@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import './Dashboard.css';
 import { getEvents } from '../services/EventsService';
 import { deleteEvent } from '../services/EventsService';
+import { createId } from '../services/HelperService';
 import { createEvent } from '../services/EventsService';
 import { changeEventParticipation } from '../services/EventsService';
 import { getUserInfo } from '../services/UserService';
@@ -47,11 +48,8 @@ function Dashboard() {
     useEffect(() => {
         getUserInfo(searchParams.get('userId')).then(res => {
             user = res.data;    
-
             setUserInfo(user);
-                getAllEvents()
-
-
+            getAllEvents()
         })
 
 
@@ -80,11 +78,12 @@ function Dashboard() {
     }
 
     function removeParticipation(event) {
-        const index = event.participants.indexOf(user.id);
+        const index = event.participants.indexOf(searchParams.get('userId'));
         if (index !== -1) {
             event.participants.splice(index, 1);
         }
-        changeEventParticipation(event.participants).then(() => {
+        console.log(event.participants);
+        changeEventParticipation(event.id, event.participants).then(() => {
             getAllEvents();
         })
     }
@@ -106,17 +105,7 @@ function Dashboard() {
         });
     }
 
-    function createId(){
-        let result = '';
-        const characters = 'abcdef0123456789';
-        const charactersLength = characters.length;
-        let counter = 0;
-        while (counter < 32) {
-          result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          counter += 1;
-        }
-        return result;
-    }
+
 
 
     function createParticipation(event) {

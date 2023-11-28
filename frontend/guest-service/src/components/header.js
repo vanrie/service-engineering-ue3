@@ -3,13 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container'
 
 function Header() {
-    const dummyUser = {
-        _id: 1,
-        firstName: 'Asda',
-        lastName: 'Asda',
-        email: 'Asdd',
-        isAdmin: true,
-    }
+
     return (
         <Navbar className="bg-body-tertiary">
         <Container>
@@ -17,7 +11,7 @@ function Header() {
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <Navbar.Text>
-              Hallo <a href="#login">{dummyUser.firstName} {dummyUser.lastName}</a>
+               {document.location.href == 'http://localhost:3000/dashboard' ? <a href="/">Logout</a> : null}
             </Navbar.Text>
           </Navbar.Collapse>
         </Container>

@@ -10,7 +10,7 @@ export const userInfo = () => {
 }
 
 export const registerUser = (body) => {
-    return axios.post('http://localhost:5000/api/registerUser', body);
+    return axios.post('http://localhost:5000/api/addUser', body);
 }
 
 export const login = (body) => {

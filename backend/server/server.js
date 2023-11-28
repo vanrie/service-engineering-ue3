@@ -36,7 +36,7 @@ app.get('/api/getAllEvents', (request, response)=>{
     });
 })
 
-app.post('/api/AddUser', multer().none(), (request, response) => {
+app.post('/api/addUser', multer().none(), (request, response) => {
     console.log("Request Body:", request.body);
 
     database.collection("guestservice-users").count({}, function (error, numOfDocs) {
@@ -97,7 +97,8 @@ app.put('/api/editUser', multer().none(), (request, response) => {
 
 app.put('/api/changeEventParticipation/:eventId', multer().none(), (request, response) => {
     const { eventId } = request.params;
-    const { participants } = request.body; // Annahme: Der Anfrage-Body enthält die aktualisierte participants-Liste
+    const { participants } = request.body; 
+    console.log(request);
 
     // Finde das Event anhand der eventId
     database.collection("guestservice-events").findOne({ id: eventId }, (error, event) => {
@@ -109,6 +110,11 @@ app.put('/api/changeEventParticipation/:eventId', multer().none(), (request, res
 
         if (!event) {
             response.status(404).json({ error: "Event not found" });
+            return;
+        }
+
+        if (!participants || !Array.isArray(participants)) {
+            response.status(400).json({ error: "Invalid participants list in the request body" });
             return;
         }
 

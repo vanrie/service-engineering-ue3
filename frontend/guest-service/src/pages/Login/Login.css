@@ -1,0 +1,26 @@
+.login {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+.loginForm {
+    max-width: 300px;
+    margin: 40px auto 0;
+}
+
+.loginButton {
+    margin: 30px 0;
+}
+
+.formGroup {
+    margin: 20px 0;
+}
+
+.snackbar {
+    background-color: yellowgreen;
+    padding: 15px 30px;
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+}
