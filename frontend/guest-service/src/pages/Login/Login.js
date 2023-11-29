@@ -16,12 +16,10 @@ function Login() {
   
     function handleSubmit(event) {
       event.preventDefault();
-      console.log(event, email, password);
       login({email: email, password: password}).then((response) => {
-        console.log(response);
+        console.log(response.data);
         if(response.data._id){
             document.location.href = '/dashboard' + '?userId=' + response.data.id;
-            console.log('redirect to page');
         }
       })
     }

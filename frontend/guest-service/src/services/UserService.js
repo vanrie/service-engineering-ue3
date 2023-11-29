@@ -4,8 +4,8 @@ export const getUserInfo = (id) => {
     return axios.get(`http://localhost:5000/api/getUserInfo/${id}`);
 }
 
-export const userInfo = () => {
-    return axios.get('http://localhost:5000/api/getUserInfo').then((response) => {return response.data});
+export const userInfos = (id) => {
+    axios.get(`http://localhost:5000/api/getUserInfo/${id}`).then((response) => {return response.data});
 
 }
 
