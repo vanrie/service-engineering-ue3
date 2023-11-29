@@ -86,6 +86,7 @@ function Dashboard() {
         }
 
         createEvent(body).then(() => {
+            handleClose()
             getAllEvents();
 
         });
@@ -95,6 +96,7 @@ function Dashboard() {
 
 
     function createParticipation(event) {
+        event.participants.push(userId);
         console.log(event.participants);
         changeEventParticipation(event.id, { participants: event.participants }).then(() => {
             getAllEvents();
