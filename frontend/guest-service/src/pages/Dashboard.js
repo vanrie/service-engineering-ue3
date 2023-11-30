@@ -21,6 +21,7 @@ function Dashboard() {
     const [user, setUser] = useState();
     const [userId, setUserId] = useState(searchParams.get('userId'));
     const [name, setName] = useState("");
+    const [maxParticipants, setMaxParticipants] = useState("");
     const [description, setDescription] = useState("");
     const [date, setDate] = useState("");
     const [type, setType] = useState("");
@@ -82,7 +83,8 @@ function Dashboard() {
             description: description,
             date: date,
             id: createId(),
-            participants: []
+            participants: [],
+            maxParticipants: maxParticipants
         }
 
         createEvent(body).then(() => {
@@ -144,6 +146,12 @@ function Dashboard() {
                                     value={date}
                                     onChange={e => setDate(e.target.value)} />
                             </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Label>Maximale Teilnehmerzahl</Form.Label>
+                                <Form.Control type="number" name="maxParticipants" placeholder="Maximale Teilnehmerzahl"
+                                    value={maxParticipants}
+                                    onChange={e => setMaxParticipants(e.target.value)} />
+                            </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Art der Veranstaltung</Form.Label>
                                 <Form.Select value={type}
@@ -175,9 +183,10 @@ function Dashboard() {
                                 <Card.Subtitle className="mb-2 text-muted">{event.type}</Card.Subtitle>
                                 <Card.Text>
                                     {event.description}
+                                    {event.maxParticipants ? <p>Maximale Teilnehmerzahl: {event.maxParticipants}</p> : null}
                                 </Card.Text>
                                 <div className='button-wrapper'>
-                                    {event.isParticipant ? <Button variant="warning" onClick={() => { removeParticipation(event) }}>Austragen</Button> : <Button variant="success" onClick={() => { createParticipation(event) }}>Teilnehmen</Button>}
+                                    {event.isParticipant ? <Button variant="warning"  onClick={() => { removeParticipation(event) }}>Austragen</Button> : <Button variant="success" disabled={event.maxParticipants <= event.participants.length} onClick={() => { createParticipation(event) }}>Teilnehmen</Button>}
                                     {user?.map((us) =>
                                         us.isAdmin ? <Button variant="danger" onClick={() => { deleteEventById(event.id) }}>Event löschen</Button> : null
                                     )}
