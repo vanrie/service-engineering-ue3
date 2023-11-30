@@ -3,15 +3,12 @@
 var express = require("express");
 var Mongoclient = require("mongodb").MongoClient;
 var cors=require("cors");
-const multer= require("multer");
 
 var app = express();
 app.use(express.json())
 app.use(cors());
-app.use(multer().none());
 
-
-var CONNECTION_STRING="mongodb+srv://rienervanessa:hwpgbYmZ8uEa88Df@cluster0.wk3uhju.mongodb.net/?retryWrites=true&w=majority";
+var CONNECTION_STRING="mongodb+srv://GuestService:oUeaXHjiZlx1MYDj@cluster0.uqiuixp.mongodb.net/?retryWrites=true&w=majority";
 
 var DATABASENAME="guestservice-db";
 var database;
@@ -36,10 +33,9 @@ app.get('/api/getAllEvents', (request, response)=>{
     });
 })
 
-app.post('/api/addUser', multer().none(), (request, response) => {
+app.post('/api/addUser', (request, response) => {
     console.log("Request Body:", request.body);
 
-    database.collection("guestservice-users").count({}, function (error, numOfDocs) {
         const newUser = {
             id: request.body.id,
             email: request.body.email,
@@ -48,18 +44,18 @@ app.post('/api/addUser', multer().none(), (request, response) => {
             password: request.body.password,
             isAdmin: request.body.isAdmin
         };
-        database.collection("guestservice-users").insertOne(newUser, function (error, result) {
-            if (error) {
-                console.error("Error adding user:", error);
-                response.status(500).json({ error: "Internal Server Error" });
-            } else {
-                response.json("User added successfully");
-            }
-        });
+
+    database.collection("guestservice-users").insertOne(newUser, function (error, result) {
+        if (error) {
+            console.error("Error adding user:", error);
+            response.status(500).json({ error: "Internal Server Error" });
+        } else {
+            response.json("User added successfully");
+        }
     });
 });
 
-app.post('/api/login', multer().none(), (request, response) => {
+app.post('/api/login', (request, response) => {
     const { email, password } = request.body;
 
     database.collection("guestservice-users").findOne({ email, password }, (error, result) => {
@@ -77,11 +73,10 @@ app.post('/api/login', multer().none(), (request, response) => {
     });
 });
 
-app.put('/api/editUser', multer().none(), (request, response) => {
+app.put('/api/editUser', (request, response) => {
     const { id, firstName, lastName } = request.body;
 
     database.collection("guestservice-users").updateOne(
-        /*{ _id: ObjectId(id) }, -> es wäre möglich über die Objekt ID das durchzuführen -> bräuchten keine eigene ID*/
         { id: id },
         { $set: { firstName, lastName } },
         (error, result) => {
@@ -95,7 +90,7 @@ app.put('/api/editUser', multer().none(), (request, response) => {
     );
 });
 
-app.put('/api/changeEventParticipation/:eventId', multer().none(), (request, response) => {
+app.put('/api/changeEventParticipation/:eventId', (request, response) => {
     const { eventId } = request.params;
     const { participants } = request.body; 
     console.log(request);
@@ -157,7 +152,7 @@ app.get('/api/getUserInfo/:userId', (request, response) => {
 
 //Admin Methods
 
-app.post('/api/createEvent', multer().none(), (request, response) => {
+app.post('/api/createEvent', (request, response) => {
     const newEvent = request.body;    
 
         // Hinzufügen des Events zur Datenbank
@@ -171,7 +166,7 @@ app.post('/api/createEvent', multer().none(), (request, response) => {
         });
 });
 
-app.put('/api/updateEvent', multer().none(), (request, response) => {
+app.put('/api/updateEvent', (request, response) => {
     const updatedEvent = request.body;
 
     database.collection("guestservice-events").updateOne(
@@ -191,7 +186,7 @@ app.put('/api/updateEvent', multer().none(), (request, response) => {
 app.delete('/api/deleteEvent/:eventId', (request, response) => {
     const eventId = request.params.eventId;
 
-    database.collection("guestservice-events").deleteOne({ id:  eventId}, (error, result) => {
+    database.collection("guestservice-events").deleteOne({ id: eventId}, (error, result) => {
         if (error) {
             console.error("Error deleting event:", error);
             response.status(500).json({ error: "Internal Server Error" });
