@@ -183,7 +183,7 @@ function Dashboard() {
                                 <Card.Subtitle className="mb-2 text-muted">{event.type}</Card.Subtitle>
                                 <Card.Text>
                                     {event.description}
-                                    {event.maxParticipants ? <p>Maximale Teilnehmerzahl: {event.maxParticipants}</p> : null}
+                                    {event.maxParticipants ? <p>Maximale Teilnehmerzahl: {`${event.participants.length}/${event.maxParticipants}`}</p> : null}
                                 </Card.Text>
                                 <div className='button-wrapper'>
                                     {event.isParticipant ? <Button variant="warning"  onClick={() => { removeParticipation(event) }}>Austragen</Button> : <Button variant="success" disabled={event.maxParticipants <= event.participants.length} onClick={() => { createParticipation(event) }}>Teilnehmen</Button>}
