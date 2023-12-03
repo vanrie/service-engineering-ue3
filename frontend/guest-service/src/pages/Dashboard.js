@@ -12,7 +12,7 @@ import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useSearchParams } from 'react-router-dom';
-
+import moment from 'moment';
 
 
 function Dashboard() {
@@ -142,7 +142,7 @@ function Dashboard() {
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Datum</Form.Label>
-                                <Form.Control type="date" name="date" placeholder="Datum"
+                                <Form.Control type="datetime-local" name="datetime" placeholder="Datum"
                                     value={date}
                                     onChange={e => setDate(e.target.value)} />
                             </Form.Group>
@@ -182,7 +182,8 @@ function Dashboard() {
                                 <Card.Title>{event.name}</Card.Title>
                                 <Card.Subtitle className="mb-2 text-muted">{event.type}</Card.Subtitle>
                                 <Card.Text>
-                                    {event.description}
+                                    Am: {moment(event.date).format('DD.MM.YYYY, HH:mm')} <br />
+                                    {event.description} <br />
                                     {event.maxParticipants ? <p>Maximale Teilnehmerzahl: {`${event.participants.length}/${event.maxParticipants}`}</p> : null}
                                 </Card.Text>
                                 <div className='button-wrapper'>
