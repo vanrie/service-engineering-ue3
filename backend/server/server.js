@@ -9,20 +9,18 @@ const swaggerSpecs = require('./swagger'); // Replace with the actual path to yo
 app.use(express.json());
 app.use(cors());
 
-const CONNECTION_STRING = 'mongodb+srv://tobiasvie:sRaE2l1Kuj6Jqb9R@guestservice-db.i7jqvbg.mongodb.net/?retryWrites=true&w=majority';
-const DATABASENAME = 'guestservice-db';
-let database;
+var CONNECTION_STRING ="mongodb+srv://tobiasvie:dAbZjisIeb02JnEz@guestservice-db.tsukv1w.mongodb.net/?retryWrites=true&w=majority";
+var DATABASENAME="guestservice-db";
+var database;
 
-// Move the swagger setup here
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
-app.listen(5000, () => {
-    Mongoclient.connect(CONNECTION_STRING, (error, client) => {
+app.listen(5000, ()=> {
+    Mongoclient.connect(CONNECTION_STRING,(error,client)=>{
         database = client.db(DATABASENAME);
-        console.log('Mongo DB Connection successful');
-    });
-});
-
+        console.log("Mongo DB Connection successful");
+    })
+})
 
 //Methoden...
 
@@ -35,17 +33,9 @@ app.listen(5000, () => {
  *     responses:
  *       200:
  *         description: Successful response
- *         content:
- *           application/json:
- *             example:
- *               - id: d1
- *                 email: user@example.com
- *                 firstName: John
- *                 lastName: Doe
- *                 isAdmin: false
  */
-app.get('/api/getAllUsers', (request, response)=>{
-    database.collection("guestservice-users").find({}).toArray((error,result)=>{
+app.get('/api/getAllUsers', (request, response) => {
+    database.collection("guestservice-users").find({}).toArray((error, result) => {
         response.send(result);
     });
 })
@@ -70,12 +60,13 @@ app.get('/api/getAllUsers', (request, response)=>{
  *         content:
  *           application/json:
  *             example:
- *               id: d1
- *               email: user@example.com
- *               firstName: John
- *               lastName: Doe
- *               isAdmin: false
+ *             id: d1
+ *             email: newuser@example.com
+ *             firstName: Jane
+ *             lastName: Doe
+ *             isAdmin: false
  */
+
 app.get('/api/getUserInfo/:userId', (request, response) => {
     console.log(request.params);
     const { userId } = request.params;
@@ -118,14 +109,14 @@ app.get('/api/getUserInfo/:userId', (request, response) => {
 app.post('/api/addUser', (request, response) => {
     console.log("Request Body:", request.body);
 
-        const newUser = {
-            id: request.body.id,
-            email: request.body.email,
-            firstName: request.body.firstName,
-            lastName: request.body.lastName,
-            password: request.body.password,
-            isAdmin: request.body.isAdmin
-        };
+    const newUser = {
+        id: request.body.id,
+        email: request.body.email,
+        firstName: request.body.firstName,
+        lastName: request.body.lastName,
+        password: request.body.password,
+        isAdmin: request.body.isAdmin
+    };
 
     database.collection("guestservice-users").insertOne(newUser, function (error, result) {
         if (error) {
@@ -245,23 +236,6 @@ app.put('/api/editUser', (request, response) => {
  *     responses:
  *       200:
  *         description: Successful response
- *         content:
- *           application/json:
- *             example:
- *               - id: d1
- *                 name: Event 1
- *                 type: Miscellaneous
- *                 description: Some description
- *                 date: 2023-01-01T00:00
- *                 participants: []
- *                 maxParticipants: 5
- *               - id: d2
- *                 name: Event 2
- *                 date: 2023-02-01T00:00
- *                 type: Miscellaneous
- *                 description: Some description
- *                 participants: [1, 2]
- *                 maxParticipants: 5
  *       500:
  *         description: Internal Server Error
  *         content:
@@ -319,7 +293,7 @@ app.get('/api/getAllEvents', (request, response) => {
  */
 app.put('/api/changeEventParticipation/:eventId', (request, response) => {
     const { eventId } = request.params;
-    const { participants } = request.body; 
+    const { participants } = request.body;
     console.log(request);
 
     // Finde das Event anhand der eventId
@@ -385,17 +359,17 @@ app.put('/api/changeEventParticipation/:eventId', (request, response) => {
  *         description: Event created successfully
  */
 app.post('/api/createEvent', (request, response) => {
-    const newEvent = request.body;    
+    const newEvent = request.body;
 
-        // Hinzufügen des Events zur Datenbank
-        database.collection("guestservice-events").insertOne(newEvent, (error, result) => {
-            if (error) {
-                console.error("Error creating event:", error);
-                response.status(500).json({ error: "Internal Server Error" });
-            } else {
-                response.json("Event created successfully");
-            }
-        });
+    // Hinzufügen des Events zur Datenbank
+    database.collection("guestservice-events").insertOne(newEvent, (error, result) => {
+        if (error) {
+            console.error("Error creating event:", error);
+            response.status(500).json({ error: "Internal Server Error" });
+        } else {
+            response.json("Event created successfully");
+        }
+    });
 });
 
 
@@ -468,7 +442,7 @@ app.put('/api/updateEvent', (request, response) => {
 app.delete('/api/deleteEvent/:eventId', (request, response) => {
     const eventId = request.params.eventId;
 
-    database.collection("guestservice-events").deleteOne({ id: eventId}, (error, result) => {
+    database.collection("guestservice-events").deleteOne({ id: eventId }, (error, result) => {
         if (error) {
             console.error("Error deleting event:", error);
             response.status(500).json({ error: "Internal Server Error" });
